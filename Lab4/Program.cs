@@ -16,7 +16,36 @@ namespace Lab4
               LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         static void Main(string[] args)
         {
+            Login();
             ImplementLoggingFuntion();
+        }
+
+        private static bool Login()
+        {
+            var loginController = new LoginController();
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine("Userid: ");
+                string userid = Console.ReadLine();
+                Console.WriteLine("Password: ");
+                string password = Console.ReadLine();
+                switch (loginController.Login(userid, password))
+                {
+                    case LoginResponse.Succeeded:
+                        Console.WriteLine("Login succeeded");
+                        return true;
+                    case LoginResponse.Failed:
+                        Console.WriteLine("Login faild, try again.\n");
+                        break;
+                    case LoginResponse.TooManyAttempts:
+                        Console.WriteLine("Too many attempts were made, you may not enter.");
+                        return false;
+                    default:
+                        throw new Exception("Code should not reach here.");
+                }
+            }
+
+            return false;
         }
 
         private static void ImplementLoggingFuntion()
